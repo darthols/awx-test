@@ -23,15 +23,15 @@
 
   tasks:
 
-    # @action debug # Ansible env.
-    - name: Ansible env.
-      debug:
-        var: ansible_env
+    # # @action debug # Ansible env.
+    # - name: Ansible env.
+    #   debug:
+    #     var: ansible_env
 
-    # @action debug # Ansible facts.
-    - name: Ansible facts.
-      debug:
-        var: ansible_facts
+    # # @action debug # Ansible facts.
+    # - name: Ansible facts.
+    #   debug:
+    #     var: ansible_facts
 
     # @action debug # Ansible hostname.
     - name: Ansible hostname.
