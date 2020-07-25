@@ -1,0 +1,8 @@
+---
+# defaults file for /mnt/hgfs/devel/ansible/roles/onet.certificat-generate
+
+# @var key_name: {{ ansible_facts.ansible_hostname }}.pem # Nom de la clé privée.
+key_name: "{{ ansible_hostname }}.pem"
+
+# @var crt_name: {{ ansible_facts.ansible_hostname }}.crt # Nom du certificat.
+crt_name: "{{ ansible_facts.ansible_hostname }}.crt"

@@ -1,0 +1,49 @@
+---
+# tasks file for /mnt/hgfs/devel/ansible/roles/onet.certificat-generate
+
+# La création d'un certificat auto-signé se réalise en trois étapes :
+#   * Création de la clé privée               : /etc/pki/tls/private/myServer.pem
+#   * Création de la requête de certification : /etc/pki/tls/certs/myServer.csr
+#   * Création du certificat                  : /etc/pki/tls/certs/myServer.crt
+
+# @action stat # Teste si la clé privée existe déjà.
+- name: Teste si la clé privée existe déjà
+  stat:
+    path: "/etc/pki/tls/private/{{ key_name }}"
+  register: pem_exists_result
+
+# @action openssl_privatekey # Generate an OpenSSL private key.
+- name: Generate an OpenSSL private key (4096 bits, RSA)
+  openssl_privatekey:
+    path: "/etc/pki/tls/private/{{ key_name }}"
+    type: RSA
+    size: 4096
+  when: pem_exists_result.stat.exists == False
+
+# @action stat # Teste si la requête de certification existe déjà.
+- name: Teste si la requête de certification existe déjà
+  stat:
+    path: "/etc/pki/tls/certs/{{ ansible_hostname }}.csr"
+  register: csr_exists_result
+
+# @action openssl_csr # Generate an OpenSSL Certificate Signing Request.
+- name: Generate an OpenSSL Certificate Signing Request
+  openssl_csr:
+    path: "/etc/pki/tls/certs/{{ ansible_hostname }}.csr"
+    privatekey_path: "/etc/pki/tls/private/{{ key_name }}"
+    common_name: "{{ ansible_fqdn }}"
+  when: csr_exists_result.stat.exists == False
+
+# @action stat # Teste si le certificat existe déjà.
+- name: Teste si le certificat existe déjà
+  stat:
+    path: "/etc/pki/tls/certs/{{ crt_name }}"
+  register: crt_exists_result
+
+- name: Generate a Self Signed OpenSSL certificate
+  openssl_certificate:
+    path: "/etc/pki/tls/certs/{{ crt_name }}"
+    privatekey_path: "/etc/pki/tls/private/{{ key_name }}"
+    csr_path: "/etc/pki/tls/certs/{{ ansible_hostname }}.csr"
+    provider: selfsigned
+  when: crt_exists_result.stat.exists == False
