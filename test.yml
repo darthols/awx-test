@@ -41,12 +41,12 @@
     # @action debug # Test lookup.
     - name: Test lookup.
       debug:
-        var: test_lookup
+        var: extra_vars.test_lookup
 
     # @action debug # OlS test.
     - name: OlS test.
       debug:
-        var: ols_test
+        var: extra_vars.ols_test
 
   tags:
     # @tag test # Test

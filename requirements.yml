@@ -1,0 +1,39 @@
+# This is used to manage Ansible role dependences
+# http://docs.ansible.com/galaxy.html#installing-multiple-roles-from-a-file
+# Install with: `ansible-galaxy install --force -r requirements.yml`
+
+# # Install a role from the Ansible Galaxy
+# - src: dfarrell07.opendaylight
+
+# # Install a role from GitHub
+# - name: opendaylight
+#   src: https://github.com/dfarrell07/ansible-opendaylight
+
+# # Install a role from a specific git branch
+# - name: opendaylight
+#   src: https://github.com/dfarrell07/ansible-opendaylight
+#   version: origin/master
+
+# # Install a role at a specific tag from GitHub
+# - name: opendaylight
+#   src: https://github.com/dfarrell07/ansible-opendaylight
+#   version: 1.0.0
+
+# # Install a role at a specific commit from GitHub
+# - name: opendaylight
+#   src: https://github.com/dfarrell07/ansible-opendaylight
+#   version: <commit hash>
+
+# Install a role from the Ansible Galaxy
+# - src: onet.certificat-generate
+# - src: geerlingguy.repo-epel
+# - src: geerlingguy.java
+# - src: geerlingguy.postgresql
+# - src: mdklatt.python3
+# - src: mdklatt.tmpdir
+# - src: geerlingguy.pip
+# - src: geerlingguy.ansible
+# - src: geerlingguy.git
+# - src: geerlingguy.gitlab
+# - src: geerlingguy.docker
+# - src: undergreen.mongodb
