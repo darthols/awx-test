@@ -1,0 +1,9 @@
+.direnv
+.env.local
+.env.personal
+.env.secrets
+*.retry
+
+# IDE
+*.code-workspace
+.cache

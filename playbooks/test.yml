@@ -1,0 +1,113 @@
+---
+- hosts: test_servers
+  name: Test de génération de certificat
+  become: true
+  gather_facts: true
+
+  vars:
+
+    # @var admin: credentials du compte de service
+    admin:
+      name: "darthols"
+
+    # @var vault_addr: URL du serveur Vault
+    vault_addr: "https://magneto.ols.io:8200"
+    # @var vault_token: Token d'accès au Vault
+    vault_token: "{{ lookup('file', '../token.asc') }}"
+    # @var vault_path: /:engine/:path # Début du path du vault
+    vault_path: "{{ lookup('file', '../vault.asc') }}"
+    # @var validate_certs: false si le certificat est auto-signé et ne doit pas être vérifié
+    validate_certs: false
+
+    # @var ansible_secret: dictionnaire # Informations du secret ansible
+    ansible_secret: "{{ lookup('hashi_vault', 'secret={{ vault_path }}/ansible token={{ vault_token }} url={{ vault_addr }}
+                          validate_certs={{ validate_certs }}')}}"
+
+    # @var nexus_cpt: dict # Crédentiels du compte devant accéder au Nexus
+    nexus_cpt: "{{ lookup('hashi_vault', 'secret={{ vault_path }}/../nexus token={{ vault_token }} url={{ vault_addr }}
+                     validate_certs={{ validate_certs }}') }}"
+
+    api_name: "api-demo"
+    # @var api_secret: dict # Crédentiels du service API
+    api_secret: "{{ lookup('hashi_vault', 'secret={{ vault_path }}/{{ api_name }}/api token={{ vault_token }} url={{ vault_addr }}
+                      validate_certs={{ validate_certs }}') }}"
+    api_username: "{{ api_secret.username }}"
+    api_password: "{{ api_secret.password }}"
+
+    # @var quick_start: true pour bypasser certaines opérations comme le Unseal
+    quick_start: true
+
+  pre_tasks:
+
+    - name: Show python lib/site paths
+      community.general.python_requirements_info:
+
+    - name: Check for cryptography
+      community.general.python_requirements_info:
+        dependencies: cryptography
+
+    # # @action ansible.builtin.debug # Ansible env.
+    # - name: Ansible env.
+    #   ansible.builtin.debug:
+    #     var: ansible_env
+    #     verbosity: 3
+
+    # # @action ansible.builtin.debug # Ansible facts.
+    # - name: Ansible facts.
+    #   ansible.builtin.debug:
+    #     var: ansible_facts
+    #     verbosity: 3
+
+    # # @action ansible.builtin.debug # Ansible hostname.
+    # - name: Ansible hostname.
+    #   ansible.builtin.debug:
+    #     var: ansible_hostname
+    #     verbosity: 2
+
+    # # @action ansible.builtin.debug # Test lookup 1.
+    # - name: Test lookup 1.
+    #   ansible.builtin.debug:
+    #     var: ansible_secret
+    #     verbosity: 1
+
+    # # @action ansible.builtin.debug # Test lookup 2.
+    # - name: Test lookup 2.
+    #   ansible.builtin.debug:
+    #     var: api_secret
+    #     verbosity: 1
+
+    # # @action ansible.posix.authorized_key # Déploiement de la clé ssh
+    # - name: Déploiement de la clé ssh.
+    #   ansible.posix.authorized_key:
+    #     key: "{{ lookup('file', '../group_vars/secrets/id_ed25519.pub') }}"
+    #     user: "{{ admin.name }}"
+    #   tags:
+    #     - system
+    #     - user
+
+    # # @action ansible.builtin.copy # Configuration de sudo
+    # - name: Configuration de sudo.
+    #   ansible.builtin.copy:
+    #     dest: "/etc/sudoers.d/{{ admin.name }}"
+    #     content: '{{ admin.name }} ALL=(ALL) NOPASSWD:ALL'
+    #     validate: '/usr/sbin/visudo -cf %s'
+    #     mode: "0640"
+    #   tags:
+    #     - system
+    #     - user
+
+  roles:
+
+    # @role onet_certificat_generate: Génération d'un certificat auto-signé.
+    - role: onet_certificat_generate
+      key_name: "{{ ansible_hostname }}.pem"
+      crt_name: "{{ ansible_hostname }}.crt"
+      tags:
+        # @tag ssl # Mise en oeuvre de TLS
+        - ssl
+
+  tags:
+    # @tag test # Test
+    - server
+    # @tag deploy # Automatisation du déploiement
+    - deploy

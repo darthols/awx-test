@@ -2,38 +2,38 @@
 # http://docs.ansible.com/galaxy.html#installing-multiple-roles-from-a-file
 # Install with: `ansible-galaxy install --force -r requirements.yml`
 
-# # Install a role from the Ansible Galaxy
-# - src: dfarrell07.opendaylight
+# # Install collections from Ansible Galaxy.
+collections:
+  - name: community.general
+  - name: community.crypto
+#     version: 4.5.0
+#   - name: ansible.posix
+#   - name: containers.podman
+#   - name: community.docker
 
-# # Install a role from GitHub
-# - name: opendaylight
-#   src: https://github.com/dfarrell07/ansible-opendaylight
+# # Install roles
+# roles:
 
-# # Install a role from a specific git branch
-# - name: opendaylight
-#   src: https://github.com/dfarrell07/ansible-opendaylight
-#   version: origin/master
+#   # Install a role from the Ansible Galaxy
+#   - src: geerlingguy.repo-epel
+#   - src: geerlingguy.java
+#     version: 1.9.6
 
-# # Install a role at a specific tag from GitHub
-# - name: opendaylight
-#   src: https://github.com/dfarrell07/ansible-opendaylight
-#   version: 1.0.0
+#   # Install a role from GitHub
+#   - name: opendaylight
+#     src: https://github.com/dfarrell07/ansible-opendaylight
 
-# # Install a role at a specific commit from GitHub
-# - name: opendaylight
-#   src: https://github.com/dfarrell07/ansible-opendaylight
-#   version: <commit hash>
+#   # Install a role from a specific git branch
+#   - name: opendaylight
+#     src: https://github.com/dfarrell07/ansible-opendaylight
+#     version: origin/master
 
-# Install a role from the Ansible Galaxy
-# - src: onet.certificat-generate
-# - src: geerlingguy.repo-epel
-# - src: geerlingguy.java
-# - src: geerlingguy.postgresql
-# - src: mdklatt.python3
-# - src: mdklatt.tmpdir
-# - src: geerlingguy.pip
-# - src: geerlingguy.ansible
-# - src: geerlingguy.git
-# - src: geerlingguy.gitlab
-# - src: geerlingguy.docker
-# - src: undergreen.mongodb
+#   # Install a role at a specific tag from GitHub
+#   - name: opendaylight
+#     src: https://github.com/dfarrell07/ansible-opendaylight
+#     version: 1.0.0
+
+#   # Install a role at a specific commit from GitHub
+#   - name: opendaylight
+#     src: https://github.com/dfarrell07/ansible-opendaylight
+#     version: <commit hash>
