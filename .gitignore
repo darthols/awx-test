@@ -7,3 +7,4 @@
 # IDE
 *.code-workspace
 .cache
+.vscode/settings.json
