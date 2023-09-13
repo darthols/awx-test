@@ -1,0 +1,47 @@
+---
+- hosts: test_servers
+  name: Test de génération de certificat
+  become: true
+  gather_facts: true
+
+  vars:
+
+    # @var admin: credentials du compte de service
+    admin:
+      name: "darthols"
+
+    # @var ansible_secret: {"username": "nnn", "password": "xxx"} # Informations du secret ansible
+    ansible_secret: "{{ lookup('hashi_vault', 'secret={{ inv_vault_engine }}/ansible') }}"
+
+    # @var api_secret: {"username": "nnn", "password": "xxx"} # Secrets du compte de service
+    api_secret: "{{ lookup('hashi_vault', 'secret={{ inv_vault_engine }}/demo-api/api') }}"
+
+    # @var nexus_cpt: {"username": "nnn", "password": "xxx"} # Secrets du compte de service du repository
+    nexus_cpt: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ inv_vault_engine }}/nexus') }}"
+
+  pre_tasks:
+
+    # @action community.general.python_requirements_info # Show python lib/site paths.
+    - name: Show python lib/site paths
+      community.general.python_requirements_info:
+
+    # @action community.general.python_requirements_info # Check for cryptography.
+    - name: Check for cryptography
+      community.general.python_requirements_info:
+        dependencies: cryptography
+
+  roles:
+
+    # @role onet_certificat_generate: Génération d'un certificat auto-signé.
+    - role: onet_certificat_generate
+      key_name: "{{ ansible_hostname }}.pem"
+      crt_name: "{{ ansible_hostname }}.crt"
+      tags:
+        # @tag ssl # Mise en oeuvre de TLS
+        - ssl
+
+  tags:
+    # @tag test # Test
+    - server
+    # @tag deploy # Automatisation du déploiement
+    - deploy

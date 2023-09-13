@@ -57,31 +57,40 @@ Généraytion d'un certificat via AWX.
 
 ## Installation
 
+Pour l'installation, il faut récupérer les sources de Gitlab, créer les fichiers `.env.local` et `.env.secrets` et générer l'environnement virtuel :
+(penser à mettre un token valide pour se connecter au Vault : `VAULT_TOKEN`)
+Les variables `inv_vault_engine` et `inv_repository_url` sont désormais dans l'inventory pour AWX ou dans `group_vars\all\all.yml`.
+
 ```bash
 git clone git@gitlab.com:darth-ansible/awx-test.git
+
+cat << EOF > .env.local
+export VAULT_ADDR="https://isi-forge.vault.siege.grouponet.com"
+export VAULT_SKIP_VERIFY="false"
+EOF
+
+cat << EOF > .env.local
+export VAULT_ADDR="https://magneto:8200"
+export VAULT_SKIP_VERIFY="false"
+EOF
+
+cat << EOF > .env.secrets
+export VAULT_TOKEN="s.123456789abcdefghijklmno"
+EOF
+
 direnv allow .
 make env
 
-ansible-playbook playbooks/test.yml -k -K
-```
-
-### Fichiers complémentaires (exemples de paramètres d'environnement)
-
-- Fichier `.env.local`
-
-```ini
-export VAULT_ADDR="https://magneto:8200"
-```
-
-- Fichier `.env.secret`
-
-```ini
-export VAULT_TOKEN="s.123456789abcdefghijklmno"
+ansible-playbook playbooks/test_new.yml -k -K
 ```
 
 ## Vérifications
 
 Connexion à la machine cible via `ssh` :
+
+```bash
+ssh-copy-id darthols@rincevent
+```
 
 ```bash
 ssh -F ssh.cfg rincevent
@@ -124,7 +133,7 @@ n/a
 ## Authors and acknowledgment
 
 darthols <dartholco@gmail.com> \
-Thanks to [WeScale](https://www.wescale.fr/) for the ultimate site <https://ansible-ultimate-edition.readthedocs.io/en/latest/index.html>
+Merci à [WeScale.fr](https://training.wescale.fr/) pour le site [Ansible Ultimate Edition](https://ansible-ultimate-edition.readthedocs.io/en/latest/index.html) et en particulier à [Aurélien Maury](https://github.com/aurelienmaury) et [Gautier Loterman](https://github.com/gloterman) pour leur présentation lors du Devoxx 2022.\
 
 ## License
 

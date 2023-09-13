@@ -15,3 +15,11 @@ env:
 	@ansible-galaxy install -fr "${PWD}/requirements.yml" && \
 	echo "[  OK  ] ANSIBLE-GALAXY REQUIREMENTS" || \
 	echo "[FAILED] ANSIBLE-GALAXY REQUIREMENTS"
+
+	@sudo cat "/etc/pki/ca-trust/source/anchors/onet-ac-racine.pem" >> "$$(python -m certifi)" && \
+	echo "[  OK  ] CERTIFICAT RACINE" || \
+	echo "[FAILED] CERTIFICAT RACINE"
+
+	@sudo cat "/etc/pki/ca-trust/source/anchors/onet-ac-secondaire.pem" >> "$$(python -m certifi)" && \
+	echo "[  OK  ] CERTIFICAT SECONDAIRE" || \
+	echo "[FAILED] CERTIFICAT SECONDAIRE"

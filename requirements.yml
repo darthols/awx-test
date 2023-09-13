@@ -7,7 +7,7 @@ collections:
   - name: community.general
   - name: community.crypto
 #     version: 4.5.0
-#   - name: ansible.posix
+  - name: ansible.posix
 #   - name: containers.podman
 #   - name: community.docker
 

@@ -1,16 +1,17 @@
 # Rapatrier les dépendances :
 #  pip3 install -U --no-cache-dir -r requirements.txt
 
+# Version précise
+# ansible-core==2.12.4
+
 ansible-core
 ansible-lint
 yamllint
-# ansible-lint[yamllint]
-# Version précise
-# ansible-core==2.12.4
 git-changelog
 hvac
+ansible-modules-hashivault
 
 molecule
 molecule-docker
-#molecule-podman
-molecule-goss
+# molecule-podman
+# molecule-goss

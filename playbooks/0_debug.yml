@@ -1,0 +1,93 @@
+---
+- hosts: test_servers
+  name: Test de génération de certificat
+  become: true
+  gather_facts: true
+
+  vars:
+
+    # @var admin: credentials du compte de service
+    admin:
+      name: "darthols"
+
+    # @var ansible_secret: {"username": "nnn", "password": "xxx"} # Informations du secret ansible
+    ansible_secret: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ inv_vault_engine }}/ansible') }}"
+
+    # @var api_secret: {"username": "nnn", "password": "xxx"} # Secrets du compte de service
+    api_secret: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ inv_vault_engine }}/demo-api/api') }}"
+
+    # @var nexus_cpt: {"username": "nnn", "password": "xxx"} # Secrets du compte de service du repository
+    nexus_cpt: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ inv_vault_engine }}/nexus') }}"
+
+  tasks:
+
+    # @action community.general.python_requirements_info # Show python lib/site paths.
+    - name: Show python lib/site paths
+      community.general.python_requirements_info:
+
+    # @action community.general.python_requirements_info # Check for cryptography.
+    - name: Check for cryptography
+      community.general.python_requirements_info:
+        dependencies: cryptography
+
+    # @action ansible.builtin.debug # inv_repository_url.
+    - name: Affiche inv_repository_url.
+      ansible.builtin.debug:
+        var: inv_repository_url
+        verbosity: 1
+
+    # @action ansible.builtin.debug # Ansible env.
+    - name: Ansible env.
+      ansible.builtin.debug:
+        var: ansible_env
+        verbosity: 3
+
+    # @action ansible.builtin.debug # Ansible facts.
+    - name: Ansible facts.
+      ansible.builtin.debug:
+        var: ansible_facts
+        verbosity: 3
+
+    # @action ansible.builtin.debug # Ansible hostname.
+    - name: Ansible hostname.
+      ansible.builtin.debug:
+        var: ansible_hostname
+        verbosity: 2
+
+    # @action ansible.builtin.debug # Test lookup 1.
+    - name: Test lookup 1.
+      ansible.builtin.debug:
+        var: ansible_secret
+        verbosity: 1
+
+    # @action ansible.builtin.debug # Test lookup 2.
+    - name: Test lookup 2.
+      ansible.builtin.debug:
+        var: api_secret
+        verbosity: 1
+
+    # # @action ansible.posix.authorized_key # Déploiement de la clé ssh
+    # - name: Déploiement de la clé ssh.
+    #   ansible.posix.authorized_key:
+    #     key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
+    #     user: "{{ admin.name }}"
+    #   tags:
+    #     - system
+    #     - user
+
+    # # @action ansible.builtin.copy # Configuration de sudo
+    # - name: Configuration de sudo.
+    #   ansible.builtin.copy:
+    #     dest: "/etc/sudoers.d/{{ admin.name }}"
+    #     content: '{{ admin.name }} ALL=(ALL) NOPASSWD:ALL'
+    #     validate: '/usr/sbin/visudo -cf %s'
+    #     mode: "0640"
+    #   tags:
+    #     - system
+    #     - user
+
+  tags:
+    # @tag test # Test
+    - server
+    # @tag deploy # Automatisation du déploiement
+    - deploy
