@@ -6,6 +6,13 @@
 #   * Création de la requête de certification : /etc/pki/tls/certs/myServer.csr
 #   * Création du certificat                  : /etc/pki/tls/certs/myServer.crt
 
+# @action ansible.builtin.pip # Installe la librairie de cryptographie.
+- name: Installe la librairie de cryptographie
+  ansible.builtin.pip:
+    name:
+      - wheel
+      - cryptography
+
 # @action stat # Teste si la clé privée existe déjà.
 - name: Teste si la clé privée existe déjà
   stat:
