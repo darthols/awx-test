@@ -75,7 +75,7 @@ export VAULT_SKIP_VERIFY="false"
 EOF
 
 cat << EOF > .env.secrets
-export VAULT_TOKEN="s.123456789abcdefghijklmno"
+export VAULT_TOKEN="<token>"
 EOF
 
 direnv allow .
