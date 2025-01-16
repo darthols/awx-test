@@ -1,0 +1,8 @@
+bump = "auto"
+convention = "angular"
+in-place = false
+marker-line = "<!-- insertion marker -->"
+output = "CHANGELOG.md"
+template = "keepachangelog"
+versioning = "semver"
+zerover = true

@@ -1,2 +1,5 @@
 inv_vault_engine: dev
-inv_repository_url: "https://isi-forge.nexus.siege.grouponet.com/repository/maven-releases/"
+inv_repository_url: "https://onet.jfrog.io/artifactory/onet-maven/"
+
+# https://docs.ansible.com/ansible-core/2.18/reference_appendices/interpreter_discovery.html
+ansible_python_interpreter: auto_silent

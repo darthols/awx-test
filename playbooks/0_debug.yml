@@ -6,18 +6,14 @@
 
   vars:
 
-    # @var admin: credentials du compte de service
-    admin:
-      name: "darthols"
-
     # @var ansible_secret: {"username": "nnn", "password": "xxx"} # Informations du secret ansible
     ansible_secret: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ inv_vault_engine }}/ansible') }}"
 
     # @var api_secret: {"username": "nnn", "password": "xxx"} # Secrets du compte de service
     api_secret: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ inv_vault_engine }}/demo-api/api') }}"
 
-    # @var nexus_cpt: {"username": "nnn", "password": "xxx"} # Secrets du compte de service du repository
-    nexus_cpt: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ inv_vault_engine }}/nexus') }}"
+    # @var jfrog_cpt: {"username": "nnn", "password": "xxx"} # Secrets du compte de service du repository
+    jfrog_cpt: "{{ lookup('community.hashi_vault.hashi_vault', 'secret={{ inv_vault_engine }}/JFrog') }}"
 
   tasks:
 
